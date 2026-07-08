@@ -37,36 +37,48 @@ exports.main = async (event, context) => {
       status: 'pending'
     }).count();
 
-    // 获取今日已记账数
+    // 获取今日已记账数与金额合计
     const todayBillsRes = await db.collection('bills').where({
       _openid: user._openid,
       date: todayStr
-    }).count();
+    }).get();
+    const todayAmount = todayBillsRes.data.reduce((s, b) => s + (Number(b.amount) || 0), 0);
+    const todayAmountStr = todayAmount.toFixed(2);
 
+    const todayBillCount = todayBillsRes.data.length;
     const remindContent = pendingRes.total > 0
       ? '你有 ' + pendingRes.total + ' 笔待补记账单，快去处理吧！'
-      : (todayBillsRes.total === 0
+      : (todayBillCount === 0
         ? '今天还没有记账哦，记得记一笔～'
-        : '今天已记 ' + todayBillsRes.total + ' 笔，继续保持！');
+        : '今天已记 ' + todayBillCount + ' 笔，继续保持！');
 
     // 发送订阅消息
-    await sendSubscribeMessage(user._openid, remindContent, pendingRes.total);
+    await sendSubscribeMessage(user._openid, remindContent, todayAmountStr, formatBJ(now));
     sentCount++;
   }
 
   return { code: 0, data: { sent: sentCount, total: usersRes.data.length } };
 };
 
+// 格式化北京时间为 YYYY-MM-DD HH:mm
+function formatBJ(now) {
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const bj = new Date(utc + 8 * 3600000);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${bj.getFullYear()}-${pad(bj.getMonth() + 1)}-${pad(bj.getDate())} ${pad(bj.getHours())}:${pad(bj.getMinutes())}`;
+}
+
 // 发送订阅消息
-async function sendSubscribeMessage(openid, content, pendingCount) {
+// 模板字段映射：time1=记账时间, amount2=记账金额, thing3=场景说明
+async function sendSubscribeMessage(openid, content, todayAmountStr, nowStr) {
   try {
     await cloud.openapi.subscribeMessage.send({
       touser: openid,
       page: 'pages/index/index',
       data: {
-        thing1: { value: '记账提醒' },
-        thing2: { value: content.substring(0, 20) },
-        number3: { value: pendingCount }
+        time1: { value: nowStr },
+        amount2: { value: todayAmountStr },
+        thing3: { value: content.substring(0, 20) }
       },
       templateId: REMIND_TEMPLATE_ID,
       miniprogramState: 'developer'
