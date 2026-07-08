@@ -30,12 +30,8 @@ exports.main = async (event, context) => {
       continue;
     }
 
-    // 获取今日待补记提醒数
+    // 今日日期字符串（用于查询今日账单）
     const todayStr = now.toISOString().slice(0, 10);
-    const pendingRes = await db.collection('reminders').where({
-      _openid: user._openid,
-      status: 'pending'
-    }).count();
 
     // 获取今日已记账数与金额合计
     const todayBillsRes = await db.collection('bills').where({
@@ -45,15 +41,8 @@ exports.main = async (event, context) => {
     const todayAmount = todayBillsRes.data.reduce((s, b) => s + (Number(b.amount) || 0), 0);
     const todayAmountStr = todayAmount.toFixed(2);
 
-    const todayBillCount = todayBillsRes.data.length;
-    const remindContent = pendingRes.total > 0
-      ? '你有 ' + pendingRes.total + ' 笔待补记账单，快去处理吧！'
-      : (todayBillCount === 0
-        ? '今天还没有记账哦，记得记一笔～'
-        : '今天已记 ' + todayBillCount + ' 笔，继续保持！');
-
-    // 发送订阅消息
-    await sendSubscribeMessage(user._openid, remindContent, todayAmountStr, formatBJ(now));
+    // 发送订阅消息（模板仅 time1/amount2 两个字段）
+    await sendSubscribeMessage(user._openid, todayAmountStr, formatBJ(now));
     sentCount++;
   }
 
@@ -69,16 +58,15 @@ function formatBJ(now) {
 }
 
 // 发送订阅消息
-// 模板字段映射：time1=记账时间, amount2=记账金额, thing3=场景说明
-async function sendSubscribeMessage(openid, content, todayAmountStr, nowStr) {
+// 模板字段映射（仅2个字段）：time1=记账时间, amount2=记账金额
+async function sendSubscribeMessage(openid, todayAmountStr, nowStr) {
   try {
     await cloud.openapi.subscribeMessage.send({
       touser: openid,
       page: 'pages/index/index',
       data: {
         time1: { value: nowStr },
-        amount2: { value: todayAmountStr },
-        thing3: { value: content.substring(0, 20) }
+        amount2: { value: todayAmountStr }
       },
       templateId: REMIND_TEMPLATE_ID,
       miniprogramState: 'developer'
