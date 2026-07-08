@@ -3,7 +3,7 @@ App({
   globalData: {
     openid: '',
     userInfo: null,
-    cloudEnv: 'wx-jizhang-prod', // 替换为你的云开发环境ID
+    cloudEnv: 'cloud1-d1g9bo85dcae54a60', // 云开发环境ID
     currentLedgerId: '', // 当前选中的账本（空表示个人账本）
     categories: {
       expense: [
