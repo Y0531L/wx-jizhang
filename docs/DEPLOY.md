@@ -97,3 +97,35 @@ A: 用户需主动授权订阅消息，且模板ID需替换为真实值。
 
 **Q: 共享账本成员看不到账单？**
 A: 确认 ledgers 集合的 members 字段包含该用户 openid，且云函数正确查询。
+
+## 十、推送到 GitHub
+
+项目已用 Git 初始化并完成首次提交。推送到 GitHub 步骤：
+
+### 1. 在 GitHub 创建空仓库
+- 登录 [GitHub](https://github.com/) → New repository
+- 仓库名如 `wx-jizhang`，**不要**勾选 README / .gitignore / license（项目已有）
+- 创建后复制仓库地址，形如 `https://github.com/你的用户名/wx-jizhang.git`
+
+### 2. 配置 git 身份（可选，如已配置全局可跳过）
+```bash
+cd wx记账小程序
+git config user.name "你的名字"
+git config user.email "你的邮箱"
+```
+
+### 3. 添加远程仓库并推送
+```bash
+git remote add origin https://github.com/你的用户名/wx-jizhang.git
+git push -u origin main
+```
+
+首次推送需输入 GitHub 用户名和 Personal Access Token（不是密码）。
+Token 在 GitHub → Settings → Developer settings → Personal access tokens 创建，需勾选 `repo` 权限。
+
+### 4. 后续更新
+```bash
+git add -A
+git commit -m "描述本次改动"
+git push
+```
