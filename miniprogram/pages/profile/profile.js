@@ -75,7 +75,7 @@ Page({
   subscribeRemind() {
     // 请求订阅消息
     wx.requestSubscribeMessage({
-      tmplIds: ['REMIND_TEMPLATE_ID'], // 替换为实际模板ID
+      tmplIds: ['-8T7_AtBaeBRDhkyOGL2ADRPFy_jHy6qw-8Tf_ffVzA'], // 订阅消息模板ID
       success: () => {
         this.toggleRemind(true);
       },

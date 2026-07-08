@@ -7,7 +7,7 @@ const db = cloud.database();
 const _ = db.command;
 
 // 订阅消息模板ID（替换为实际模板）
-const REMIND_TEMPLATE_ID = 'REMIND_TEMPLATE_ID';
+const REMIND_TEMPLATE_ID = '-8T7_AtBaeBRDhkyOGL2ADRPFy_jHy6qw-8Tf_ffVzA';
 
 exports.main = async (event, context) => {
   const now = new Date();
