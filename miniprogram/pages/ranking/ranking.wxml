@@ -1,0 +1,58 @@
+<!--pages/ranking/ranking.wxml - 好友排行-->
+<view class="page">
+  <!-- 周期切换 -->
+  <view class="seg-tabs">
+    <view class="seg-tab {{period === 'week' ? 'active' : ''}}" bindtap="switchPeriod" data-p="week">本周</view>
+    <view class="seg-tab {{period === 'month' ? 'active' : ''}}" bindtap="switchPeriod" data-p="month">本月</view>
+    <view class="seg-tab {{period === 'total' ? 'active' : ''}}" bindtap="switchPeriod" data-p="total">累计</view>
+  </view>
+
+  <!-- 维度切换 -->
+  <view class="dim-bar">
+    <view class="dim-tab {{dim === 'expense' ? 'active' : ''}}" bindtap="switchDim" data-d="expense">谁最能花</view>
+    <view class="dim-tab {{dim === 'income' ? 'active' : ''}}" bindtap="switchDim" data-d="income">谁最能赚</view>
+    <view class="dim-tab {{dim === 'save' ? 'active' : ''}}" bindtap="switchDim" data-d="save">谁最能攒</view>
+    <view class="dim-tab {{dim === 'count' ? 'active' : ''}}" bindtap="switchDim" data-d="count">谁最勤快</view>
+  </view>
+
+  <!-- 我的排名 -->
+  <view class="my-rank-card">
+    <view class="my-rank-left">
+      <image class="my-avatar" src="{{myInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="my-info">
+        <text class="my-name">{{myInfo.nickName || '我'}}</text>
+        <text class="my-rank-tip">我的排名 第 {{myRank}} 名</text>
+      </view>
+    </view>
+    <view class="my-value">
+      <text class="my-value-num">{{myValueText}}</text>
+    </view>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="rank-list" wx:if="{{rankList.length > 0}}">
+    <view class="rank-item" wx:for="{{rankList}}" wx:key="openid">
+      <view class="rank-num rank-num-{{index + 1}}" wx:if="{{index < 3}}">{{index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}}</view>
+      <view class="rank-num" wx:else>{{index + 1}}</view>
+      <image class="rank-avatar" src="{{item.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="rank-info">
+        <text class="rank-name">{{item.nickName || '匿名用户'}}</text>
+        <text class="rank-sub">{{item.subText}}</text>
+      </view>
+      <text class="rank-value">{{item.valueText}}</text>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <view class="empty-icon">🏆</view>
+    <text class="empty-text">还没有排行榜数据</text>
+    <view class="invite-btn" bindtap="inviteFriend">邀请好友一起记账</view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>
+
+<!-- 邀请好友按钮 -->
+<view class="fab-invite" bindtap="inviteFriend" wx:if="{{rankList.length > 0}}">
+  <text>+ 邀请</text>
+</view>

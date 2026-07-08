@@ -1,0 +1,23 @@
+<!--pages/category/category.wxml - 分类管理-->
+<view class="page">
+  <view class="seg-tabs">
+    <view class="seg-tab {{tab === 'expense' ? 'active' : ''}}" bindtap="switchTab" data-t="expense">支出分类</view>
+    <view class="seg-tab {{tab === 'income' ? 'active' : ''}}" bindtap="switchTab" data-t="income">收入分类</view>
+  </view>
+
+  <view class="cat-list">
+    <view class="cat-item" wx:for="{{list}}" wx:key="id">
+      <view class="cat-icon">{{item.icon}}</view>
+      <text class="cat-name">{{item.name}}</text>
+      <text class="cat-tag" wx:if="{{item.custom}}">自定义</text>
+      <view class="cat-delete" wx:if="{{item.custom}}" bindtap="deleteCategory" data-id="{{item.id}}">删除</view>
+    </view>
+  </view>
+
+  <view class="add-card" bindtap="addCategory">
+    <view class="add-icon">+</view>
+    <text class="add-text">添加自定义分类</text>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>

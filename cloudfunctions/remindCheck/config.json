@@ -1,0 +1,14 @@
+{
+  "triggers": [
+    {
+      "name": "morningRemind",
+      "type": "timer",
+      "config": "0 0 8 * * * *"
+    },
+    {
+      "name": "eveningRemind",
+      "type": "timer",
+      "config": "0 0 20 * * * *"
+    }
+  ]
+}

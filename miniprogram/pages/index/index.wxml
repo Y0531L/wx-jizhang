@@ -1,0 +1,98 @@
+<!--pages/index/index.wxml - 首页-->
+<view class="page">
+  <!-- 顶部概览卡片 -->
+  <view class="overview-card">
+    <view class="overview-bg"></view>
+    <view class="overview-content">
+      <view class="month-label">{{currentYear}}年{{currentMonth}}月</view>
+      <view class="balance-row">
+        <view class="balance-item">
+          <text class="balance-label">本月支出</text>
+          <text class="balance-value expense-color">¥{{monthExpense}}</text>
+        </view>
+        <view class="balance-divider"></view>
+        <view class="balance-item">
+          <text class="balance-label">本月收入</text>
+          <text class="balance-value income-color">¥{{monthIncome}}</text>
+        </view>
+      </view>
+      <view class="balance-item net">
+        <text class="balance-label">本月结余</text>
+        <text class="balance-value {{monthNet >= 0 ? 'income-color' : 'expense-color'}}">¥{{monthNet}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 待补记提醒（检测到支付但未记账时显示）-->
+  <view class="remind-card" wx:if="{{pendingReminders.length > 0}}">
+    <view class="remind-header">
+      <text class="remind-title">⚠️ 检测到 {{pendingReminders.length}} 笔待记账</text>
+      <text class="remind-tip">来自云闪付/支付宝/银行，点击补记</text>
+    </view>
+    <view class="remind-list">
+      <view class="remind-item" wx:for="{{pendingReminders}}" wx:key="id" bindtap="onTapReminder" data-item="{{item}}">
+        <view class="remind-item-left">
+          <text class="remind-platform">{{item.platform}}</text>
+          <text class="remind-amount expense-color">¥{{item.amount}}</text>
+        </view>
+        <text class="remind-time">{{item.timeText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷功能入口 -->
+  <view class="quick-grid">
+    <view class="quick-item" bindtap="goScan">
+      <view class="quick-icon">📷</view>
+      <text class="quick-text">截图识别</text>
+    </view>
+    <view class="quick-item" bindtap="goLedger">
+      <view class="quick-icon">👥</view>
+      <text class="quick-text">共享账本</text>
+    </view>
+    <view class="quick-item" bindtap="goAchievement">
+      <view class="quick-icon">🏆</view>
+      <text class="quick-text">我的成就</text>
+    </view>
+    <view class="quick-item" bindtap="goCategory">
+      <view class="quick-icon">🏷️</view>
+      <text class="quick-text">分类管理</text>
+    </view>
+  </view>
+
+  <!-- 最近账单 -->
+  <view class="recent-section">
+    <view class="section-header">
+      <text class="section-title">最近账单</text>
+      <text class="section-more" bindtap="goBills">查看全部 ›</text>
+    </view>
+
+    <block wx:if="{{recentBills.length > 0}}">
+      <view class="bill-item" wx:for="{{recentBills}}" wx:key="_id" bindtap="onTapBill" data-id="{{item._id}}">
+        <view class="bill-icon">{{item.categoryIcon}}</view>
+        <view class="bill-info">
+          <text class="bill-category">{{item.categoryName}}</text>
+          <text class="bill-note ellipsis">{{item.note || item.sourceText}}</text>
+        </view>
+        <view class="bill-right">
+          <text class="bill-amount {{item.type === 'income' ? 'income-color' : 'expense-color'}}">
+            {{item.type === 'income' ? '+' : '-'}}¥{{item.amountText}}
+          </text>
+          <text class="bill-time">{{item.timeText}}</text>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty-state" wx:else>
+      <view class="empty-icon">📝</view>
+      <text class="empty-text">还没有账单，记一笔吧～</text>
+    </view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>
+
+<!-- 悬浮记一笔按钮 -->
+<view class="fab" bindtap="goAdd">
+  <text class="fab-icon">+</text>
+</view>

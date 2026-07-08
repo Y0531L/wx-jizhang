@@ -1,0 +1,164 @@
+/* pages/add/add.wxss */
+.page {
+  min-height: 100vh;
+  padding-bottom: 200rpx;
+}
+
+/* 类型切换 */
+.type-tabs {
+  display: flex;
+  background: #f0f0f0;
+  margin: 24rpx;
+  border-radius: 16rpx;
+  padding: 6rpx;
+}
+.type-tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 30rpx;
+  color: #5f6368;
+  border-radius: 12rpx;
+  transition: all 0.2s;
+}
+.type-tab.active {
+  background: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+.type-tab.expense-active { color: #ff3b30; }
+.type-tab.income-active { color: #34c759; }
+
+/* 金额 */
+.amount-box {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  padding: 48rpx 0;
+  margin: 0 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.currency {
+  font-size: 56rpx;
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-right: 12rpx;
+}
+.amount-input {
+  font-size: 80rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  min-width: 200rpx;
+  text-align: center;
+}
+
+/* 分类 */
+.category-section {
+  margin: 24rpx;
+}
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+.category-item {
+  width: calc((100% - 60rpx) / 4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+  border-radius: 16rpx;
+  background: #ffffff;
+  transition: all 0.15s;
+}
+.category-item.active {
+  background: #fff5f0;
+  border: 2rpx solid #ff6b35;
+}
+.cat-icon {
+  font-size: 44rpx;
+  margin-bottom: 8rpx;
+}
+.cat-name {
+  font-size: 22rpx;
+  color: #5f6368;
+}
+.category-item.active .cat-name {
+  color: #ff6b35;
+  font-weight: 500;
+}
+
+/* 详情 */
+.detail-section {
+  margin: 24rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 0 32rpx;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.detail-row:last-child {
+  border-bottom: none;
+}
+.detail-label {
+  font-size: 28rpx;
+  color: #1a1a1a;
+}
+.detail-value {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #5f6368;
+}
+.arrow {
+  margin-left: 12rpx;
+  color: #c4c7c5;
+  font-size: 32rpx;
+}
+.note-row {
+  padding: 0;
+}
+.note-input {
+  flex: 1;
+  text-align: right;
+  font-size: 28rpx;
+  padding: 32rpx 0;
+}
+
+/* 来源标记 */
+.source-tag {
+  margin: 0 24rpx;
+  padding: 20rpx 24rpx;
+  background: #f0f7ff;
+  border-radius: 12rpx;
+}
+.source-text {
+  font-size: 24rpx;
+  color: #1a73e8;
+}
+
+.bottom-spacer { height: 40rpx; }
+
+/* 底部 */
+.footer {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  padding: 20rpx 24rpx;
+  background: #ffffff;
+  box-shadow: 0 -4rpx 16rpx rgba(0,0,0,0.04);
+  gap: 20rpx;
+}
+.footer-btn {
+  flex: 1;
+}
+.footer-btn-delete {
+  width: 200rpx;
+  flex: none;
+  color: #ff3b30;
+}

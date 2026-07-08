@@ -1,0 +1,170 @@
+/* pages/ledger-detail/ledger-detail.wxss */
+.page { min-height: 100vh; padding-bottom: 40rpx; }
+
+.ledger-header {
+  display: flex;
+  align-items: center;
+  margin: 24rpx;
+  padding: 32rpx 28rpx;
+  background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+  border-radius: 24rpx;
+}
+.ledger-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-right: 24rpx;
+}
+.ledger-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.ledger-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.ledger-code {
+  font-size: 24rpx;
+  color: #9aa0a6;
+}
+.invite-btn {
+  padding: 16rpx 32rpx;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+  color: #ffffff;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+}
+
+.stat-bar {
+  display: flex;
+  margin: 0 24rpx 24rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 32rpx 0;
+}
+.stat-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stat-num {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.stat-label {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-top: 6rpx;
+}
+
+.section {
+  margin: 0 24rpx 24rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+.section-title {
+  font-size: 26rpx;
+  color: #9aa0a6;
+  padding: 24rpx 28rpx 16rpx;
+}
+.member-list { padding: 0 28rpx 16rpx; }
+.member-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #fafafa;
+}
+.member-item:last-child { border-bottom: none; }
+.member-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+  margin-right: 20rpx;
+}
+.member-info { flex: 1; }
+.member-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.member-name {
+  font-size: 28rpx;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+.member-tag {
+  font-size: 20rpx;
+  color: #ff6b35;
+  background: #fff5f0;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+.member-tag.me {
+  color: #1a73e8;
+  background: #f0f7ff;
+}
+.member-sub {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-top: 6rpx;
+  display: block;
+}
+.member-action {
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+  color: #ff3b30;
+  background: #fff0f0;
+  border-radius: 24rpx;
+}
+
+.bill-list { padding: 0 28rpx 16rpx; }
+.bill-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #fafafa;
+}
+.bill-item:last-child { border-bottom: none; }
+.bill-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #f5f6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+.bill-info { flex: 1; display: flex; flex-direction: column; gap: 6rpx; }
+.bill-category { font-size: 28rpx; color: #1a1a1a; }
+.bill-author { font-size: 22rpx; color: #9aa0a6; }
+.bill-amount { font-size: 30rpx; font-weight: 600; }
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 28rpx;
+  border-bottom: 1rpx solid #fafafa;
+  font-size: 28rpx;
+  color: #1a1a1a;
+}
+.setting-item:last-child { border-bottom: none; }
+.setting-item.danger { color: #ff3b30; }
+.arrow { color: #c4c7c5; font-size: 32rpx; }
+
+.empty-mini { text-align: center; color: #9aa0a6; font-size: 26rpx; padding: 40rpx 0; }
+.bottom-spacer { height: 40rpx; }

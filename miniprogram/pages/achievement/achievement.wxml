@@ -1,0 +1,62 @@
+<!--pages/achievement/achievement.wxml - 成就系统-->
+<view class="page">
+  <!-- 等级卡片 -->
+  <view class="level-card">
+    <view class="level-bg"></view>
+    <view class="level-content">
+      <view class="level-header">
+        <view class="level-badge">
+          <text class="level-num">{{level}}</text>
+          <text class="level-title">{{levelTitle}}</text>
+        </view>
+        <view class="level-stats">
+          <view class="stat-item">
+            <text class="stat-num">{{streakDays}}</text>
+            <text class="stat-label">连续记账</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-num">{{totalBills}}</text>
+            <text class="stat-label">累计笔数</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-num">{{achievementCount}}</text>
+            <text class="stat-label">已解锁</text>
+          </view>
+        </view>
+      </view>
+      <!-- 进度条 -->
+      <view class="progress-section">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{expPercent}}%"></view>
+        </view>
+        <text class="progress-text">距下一级还差 {{expToNext}} 经验</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成就分组 -->
+  <view class="ach-section" wx:for="{{groups}}" wx:key="key" wx:for-item="group">
+    <view class="ach-group-title">{{group.title}}</view>
+    <view class="ach-grid">
+      <view
+        class="ach-item {{item.unlocked ? 'unlocked' : 'locked'}}"
+        wx:for="{{group.items}}"
+        wx:key="code"
+        bindtap="showDetail"
+        data-item="{{item}}"
+      >
+        <view class="ach-icon-wrap">
+          <text class="ach-icon">{{item.icon}}</text>
+          <view class="ach-lock" wx:if="{{!item.unlocked}}">🔒</view>
+        </view>
+        <text class="ach-name">{{item.name}}</text>
+        <text class="ach-desc ellipsis">{{item.unlocked ? item.desc : item.hint}}</text>
+        <view class="ach-progress" wx:if="{{!item.unlocked && item.progress > 0}}">
+          <view class="ach-progress-fill" style="width: {{item.progress}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>

@@ -1,0 +1,49 @@
+<!--pages/ledger/ledger.wxml - 共享账本-->
+<view class="page">
+  <view class="page-header">
+    <text class="page-title">共享账本</text>
+    <text class="page-desc">和家人、朋友一起记账，账单实时共享</text>
+  </view>
+
+  <!-- 个人账本 -->
+  <view class="ledger-card personal" bindtap="openPersonal">
+    <view class="ledger-icon">👤</view>
+    <view class="ledger-info">
+      <text class="ledger-name">个人账本</text>
+      <text class="ledger-sub">{{personalCount}} 笔账单</text>
+    </view>
+    <text class="ledger-arrow">›</text>
+  </view>
+
+  <!-- 共享账本列表 -->
+  <view class="section-label" wx:if="{{ledgers.length > 0}}">我的共享账本</view>
+  <view class="ledger-card" wx:for="{{ledgers}}" wx:key="_id" bindtap="openLedger" data-id="{{item._id}}">
+    <view class="ledger-icon">{{item.icon || '👥'}}</view>
+    <view class="ledger-info">
+      <view class="ledger-name-row">
+        <text class="ledger-name">{{item.name}}</text>
+        <text class="ledger-tag" wx:if="{{item.role === 'owner'}}">创建者</text>
+      </view>
+      <view class="member-row">
+        <view class="member-avatars">
+          <image wx:for="{{item.members}}" wx:key="openid" wx:for-item="m" class="member-avatar" src="{{m.avatarUrl || '/images/default-avatar.png'}}"></image>
+        </view>
+        <text class="ledger-sub">{{item.memberCount}} 人 · {{item.billCount}} 笔</text>
+      </view>
+    </view>
+    <text class="ledger-arrow">›</text>
+  </view>
+
+  <!-- 创建账本 -->
+  <view class="create-card" bindtap="createLedger">
+    <view class="create-icon">+</view>
+    <text class="create-text">创建新的共享账本</text>
+  </view>
+
+  <!-- 加入账本 -->
+  <view class="join-tip" bindtap="scanJoin">
+    <text class="join-text">通过邀请码加入账本 ›</text>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>

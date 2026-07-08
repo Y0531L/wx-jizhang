@@ -1,0 +1,64 @@
+<!--pages/bills/bills.wxml - 账单列表-->
+<view class="page">
+  <!-- 月份选择 -->
+  <view class="month-bar">
+    <view class="month-arrow" bindtap="prevMonth">‹</view>
+    <view class="month-display" bindtap="pickMonth">{{year}}年{{month}}月</view>
+    <view class="month-arrow" bindtap="nextMonth">›</view>
+  </view>
+
+  <!-- 当月汇总 -->
+  <view class="summary-bar">
+    <view class="summary-item">
+      <text class="summary-label">支出</text>
+      <text class="summary-value expense-color">¥{{expenseTotal}}</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="summary-label">收入</text>
+      <text class="summary-value income-color">¥{{incomeTotal}}</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="summary-label">结余</text>
+      <text class="summary-value {{netTotal >= 0 ? 'income-color' : 'expense-color'}}">¥{{netTotal}}</text>
+    </view>
+  </view>
+
+  <!-- 筛选 -->
+  <view class="filter-bar">
+    <view class="filter-tab {{filterType === 'all' ? 'active' : ''}}" bindtap="setFilter" data-type="all">全部</view>
+    <view class="filter-tab {{filterType === 'expense' ? 'active' : ''}}" bindtap="setFilter" data-type="expense">支出</view>
+    <view class="filter-tab {{filterType === 'income' ? 'active' : ''}}" bindtap="setFilter" data-type="income">收入</view>
+  </view>
+
+  <!-- 账单列表（按日分组）-->
+  <view class="bill-list" wx:if="{{groupedBills.length > 0}}">
+    <view class="day-group" wx:for="{{groupedBills}}" wx:key="date" wx:for-item="group">
+      <view class="day-header">
+        <text class="day-date">{{group.dateText}}</text>
+        <text class="day-sum">支出 ¥{{group.dayExpense}} · 收入 ¥{{group.dayIncome}}</text>
+      </view>
+      <view class="bill-item" wx:for="{{group.bills}}" wx:key="_id" wx:for-item="bill" bindtap="onTapBill" data-id="{{bill._id}}">
+        <view class="bill-icon">{{bill.categoryIcon}}</view>
+        <view class="bill-info">
+          <text class="bill-category">{{bill.categoryName}}</text>
+          <text class="bill-note ellipsis" wx:if="{{bill.note}}">{{bill.note}}</text>
+        </view>
+        <view class="bill-right">
+          <text class="bill-amount {{bill.type === 'income' ? 'income-color' : 'expense-color'}}">
+            {{bill.type === 'income' ? '+' : '-'}}¥{{bill.amountText}}
+          </text>
+          <view class="bill-source" wx:if="{{bill.sourceTag}}">{{bill.sourceTag}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <view class="empty-icon">📭</view>
+    <text class="empty-text">本月暂无账单</text>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>

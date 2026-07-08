@@ -1,0 +1,166 @@
+/* pages/ranking/ranking.wxss */
+.page { min-height: 100vh; padding-bottom: 160rpx; }
+
+.seg-tabs {
+  display: flex;
+  background: #f0f0f0;
+  margin: 24rpx;
+  border-radius: 16rpx;
+  padding: 6rpx;
+}
+.seg-tab {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 28rpx;
+  color: #5f6368;
+  border-radius: 12rpx;
+}
+.seg-tab.active {
+  background: #ffffff;
+  color: #ff6b35;
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+
+.dim-bar {
+  display: flex;
+  margin: 0 24rpx 24rpx;
+  gap: 16rpx;
+  overflow-x: auto;
+}
+.dim-tab {
+  flex-shrink: 0;
+  padding: 14rpx 28rpx;
+  font-size: 26rpx;
+  color: #5f6368;
+  background: #ffffff;
+  border-radius: 24rpx;
+  border: 1rpx solid #f0f0f0;
+}
+.dim-tab.active {
+  color: #ff6b35;
+  border-color: #ff6b35;
+  background: #fff5f0;
+}
+
+.my-rank-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 24rpx 24rpx;
+  padding: 28rpx 32rpx;
+  background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 53, 0.08);
+}
+.my-rank-left {
+  display: flex;
+  align-items: center;
+}
+.my-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+  margin-right: 20rpx;
+}
+.my-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.my-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.my-rank-tip {
+  font-size: 22rpx;
+  color: #9aa0a6;
+}
+.my-value-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #ff6b35;
+}
+
+.rank-list {
+  margin: 0 24rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 8rpx 0;
+}
+.rank-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid #fafafa;
+}
+.rank-item:last-child { border-bottom: none; }
+.rank-num {
+  width: 56rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #9aa0a6;
+  margin-right: 16rpx;
+}
+.rank-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+  margin-right: 20rpx;
+}
+.rank-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+.rank-name {
+  font-size: 28rpx;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+.rank-sub {
+  font-size: 22rpx;
+  color: #9aa0a6;
+}
+.rank-value {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+.empty-icon { font-size: 80rpx; margin-bottom: 16rpx; }
+.empty-text { font-size: 26rpx; color: #9aa0a6; margin-bottom: 32rpx; }
+.invite-btn {
+  padding: 20rpx 48rpx;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+  color: #ffffff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+}
+.bottom-spacer { height: 40rpx; }
+
+.fab-invite {
+  position: fixed;
+  right: 40rpx;
+  bottom: 180rpx;
+  padding: 24rpx 36rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+  color: #ffffff;
+  font-size: 28rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 53, 0.4);
+  z-index: 100;
+}

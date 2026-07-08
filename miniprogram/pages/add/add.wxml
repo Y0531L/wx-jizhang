@@ -1,0 +1,81 @@
+<!--pages/add/add.wxml - 记一笔-->
+<view class="page">
+  <!-- 类型切换 -->
+  <view class="type-tabs">
+    <view class="type-tab {{type === 'expense' ? 'active expense-active' : ''}}" bindtap="switchType" data-type="expense">
+      <text>支出</text>
+    </view>
+    <view class="type-tab {{type === 'income' ? 'active income-active' : ''}}" bindtap="switchType" data-type="income">
+      <text>收入</text>
+    </view>
+  </view>
+
+  <!-- 金额输入 -->
+  <view class="amount-box">
+    <text class="currency">¥</text>
+    <input class="amount-input" type="digit" value="{{amount}}" placeholder="0.00" focus="{{amountFocus}}" bindinput="onAmountInput" />
+  </view>
+
+  <!-- 分类选择 -->
+  <view class="category-section">
+    <view class="category-grid">
+      <view
+        class="category-item {{category === item.id ? 'active' : ''}}"
+        wx:for="{{currentCategories}}"
+        wx:key="id"
+        bindtap="selectCategory"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        data-icon="{{item.icon}}"
+      >
+        <view class="cat-icon">{{item.icon}}</view>
+        <text class="cat-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 详情区 -->
+  <view class="detail-section">
+    <view class="detail-row" bindtap="pickDate">
+      <text class="detail-label">日期</text>
+      <view class="detail-value">
+        <text>{{dateText}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view class="detail-row" bindtap="pickTime" wx:if="{{showTime}}">
+      <text class="detail-label">时间</text>
+      <view class="detail-value">
+        <text>{{timeText}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view class="detail-row" bindtap="pickLedger" wx:if="{{ledgers.length > 0}}">
+      <text class="detail-label">账本</text>
+      <view class="detail-value">
+        <text>{{ledgerName || '个人账本'}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view class="detail-row note-row">
+      <text class="detail-label">备注</text>
+      <input class="note-input" placeholder="添加备注（选填）" value="{{note}}" bindinput="onNoteInput" maxlength="50" />
+    </view>
+  </view>
+
+  <!-- 来源标记（如果是微信支付/OCR 自动记账）-->
+  <view class="source-tag" wx:if="{{sourceTag}}">
+    <text class="source-text">📌 来源：{{sourceTag}}</text>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>
+
+<!-- 底部按钮 -->
+<view class="footer safe-bottom">
+  <view class="btn btn-ghost footer-btn-delete" wx:if="{{editId}}" bindtap="deleteBill">删除</view>
+  <view class="btn btn-primary footer-btn" bindtap="save">保存</view>
+</view>

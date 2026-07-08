@@ -1,0 +1,66 @@
+<!--pages/stats/stats.wxml - 统计-->
+<view class="page">
+  <!-- 类型切换 -->
+  <view class="seg-tabs">
+    <view class="seg-tab {{statType === 'expense' ? 'active' : ''}}" bindtap="switchStatType" data-type="expense">支出统计</view>
+    <view class="seg-tab {{statType === 'income' ? 'active' : ''}}" bindtap="switchStatType" data-type="income">收入统计</view>
+  </view>
+
+  <!-- 近6月趋势 -->
+  <view class="card">
+    <view class="card-title">近6个月{{statType === 'expense' ? '支出' : '收入'}}趋势</view>
+    <view class="chart-bars">
+      <view class="bar-col" wx:for="{{trend}}" wx:key="month">
+        <view class="bar-track">
+          <view class="bar-fill {{statType === 'expense' ? 'expense-bg' : 'income-bg'}}" style="height: {{item.percent}}%"></view>
+        </view>
+        <text class="bar-value">{{item.short}}</text>
+        <text class="bar-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类占比 -->
+  <view class="card">
+    <view class="card-title">分类占比</view>
+    <view class="pie-section" wx:if="{{categoryStats.length > 0}}">
+      <!-- 环形图 -->
+      <view class="pie-wrap">
+        <view class="pie" style="background: conic-gradient({{pieGradient}})">
+          <view class="pie-hole">
+            <text class="pie-total-label">合计</text>
+            <text class="pie-total-value">¥{{totalShort}}</text>
+          </view>
+        </view>
+      </view>
+      <!-- 图例 -->
+      <view class="legend">
+        <view class="legend-item" wx:for="{{categoryStats}}" wx:key="id">
+          <view class="legend-dot" style="background: {{item.color}}"></view>
+          <text class="legend-name">{{item.name}}</text>
+          <text class="legend-percent">{{item.percent}}%</text>
+          <text class="legend-amount">¥{{item.amountText}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-mini" wx:else>暂无数据</view>
+  </view>
+
+  <!-- 月度对比 -->
+  <view class="card">
+    <view class="card-title">收支对比</view>
+    <view class="compare-row" wx:for="{{compareData}}" wx:key="label">
+      <text class="compare-label">{{item.label}}</text>
+      <view class="compare-bars">
+        <view class="compare-bar-wrap">
+          <view class="compare-bar expense-bg" style="width: {{item.expensePercent}}%"></view>
+          <text class="compare-amt expense-color">¥{{item.expenseText}}</text>
+        </view>
+        <view class="compare-bar-wrap">
+          <view class="compare-bar income-bg" style="width: {{item.incomePercent}}%"></view>
+          <text class="compare-amt income-color">¥{{item.incomeText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,76 @@
+<!--pages/scan/scan.wxml - 截图识别记账-->
+<view class="page">
+  <view class="page-header">
+    <text class="page-title">截图识别记账</text>
+    <text class="page-desc">上传支付宝/云闪付/银行 App 的账单截图，自动识别金额并记账</text>
+  </view>
+
+  <!-- 平台选择 -->
+  <view class="platform-bar">
+    <view class="platform-tab {{platform === 'alipay' ? 'active' : ''}}" bindtap="setPlatform" data-p="alipay">支付宝</view>
+    <view class="platform-tab {{platform === 'unionpay' ? 'active' : ''}}" bindtap="setPlatform" data-p="unionpay">云闪付</view>
+    <view class="platform-tab {{platform === 'bank' ? 'active' : ''}}" bindtap="setPlatform" data-p="bank">银行App</view>
+    <view class="platform-tab {{platform === 'auto' ? 'active' : ''}}" bindtap="setPlatform" data-p="auto">自动识别</view>
+  </view>
+
+  <!-- 上传区 -->
+  <view class="upload-area" wx:if="{{!imageUrl}}" bindtap="chooseImage">
+    <view class="upload-icon">📷</view>
+    <text class="upload-text">点击上传账单截图</text>
+    <text class="upload-hint">支持截图或照片，需清晰显示金额</text>
+  </view>
+
+  <!-- 预览图 -->
+  <view class="preview-area" wx:if="{{imageUrl}}">
+    <image class="preview-img" src="{{imageUrl}}" mode="aspectFit"></image>
+    <view class="preview-actions">
+      <view class="preview-btn" bindtap="chooseImage">重新选择</view>
+      <view class="preview-btn primary" bindtap="startOCR">开始识别</view>
+    </view>
+  </view>
+
+  <!-- 识别中 -->
+  <view class="loading-area" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在识别中...</text>
+    <text class="loading-hint">请稍候，正在分析截图内容</text>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="result-area" wx:if="{{result && !loading}}">
+    <view class="result-header">
+      <text class="result-title">识别结果</text>
+      <text class="result-status {{result.confidence > 0.8 ? 'high' : 'low'}}">
+        {{result.confidence > 0.8 ? '高置信度' : '请核对'}}
+      </text>
+    </view>
+
+    <view class="result-card" wx:for="{{result.items}}" wx:key="index" wx:for-item="item">
+      <view class="result-row">
+        <text class="result-amount expense-color">¥{{item.amountText}}</text>
+        <text class="result-platform">{{item.platform || platformText}}</text>
+      </view>
+      <text class="result-time">{{item.timeText || '未知时间'}}</text>
+      <text class="result-merchant" wx:if="{{item.merchant}}">{{item.merchant}}</text>
+      <view class="result-actions">
+        <view class="result-btn" bindtap="editItem" data-item="{{item}}">编辑后记账</view>
+        <view class="result-btn primary" bindtap="confirmItem" data-item="{{item}}">确认记账</view>
+      </view>
+    </view>
+
+    <view class="result-empty" wx:if="{{result.items.length === 0}}">
+      <text>未能识别到账单信息，请换一张更清晰的截图</text>
+    </view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="tips-area" wx:if="{{!imageUrl && !loading && !result}}">
+    <view class="tip-title">💡 使用提示</view>
+    <view class="tip-item">• 截图需包含金额、时间等关键信息</view>
+    <view class="tip-item">• 支持支付宝、云闪付、各大银行 App 账单</view>
+    <view class="tip-item">• 识别结果会自动标注来源，可手动核对</view>
+    <view class="tip-item">• 数据仅用于本地记账，不会上传到第三方</view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>

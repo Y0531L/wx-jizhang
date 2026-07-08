@@ -1,0 +1,82 @@
+/* app.wxss - 全局样式 */
+page {
+  background-color: #f5f6f8;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+view, text, input, textarea, button {
+  box-sizing: border-box;
+}
+
+/* 主题色：橙色 */
+.primary-color { color: #ff6b35; }
+.primary-bg { background-color: #ff6b35; }
+
+/* 收入绿、支出红（中式习惯） */
+.income-color { color: #34c759; }
+.expense-color { color: #ff3b30; }
+
+/* 卡片 */
+.card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin: 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 通用按钮 */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+  color: #ffffff;
+}
+
+.btn-ghost {
+  background: #f5f6f8;
+  color: #1a1a1a;
+}
+
+/* 占位 */
+.placeholder {
+  color: #9aa0a6;
+  font-size: 26rpx;
+}
+
+/* 分隔 */
+.divider {
+  height: 1rpx;
+  background: #f0f0f0;
+  margin: 16rpx 0;
+}
+
+/* flex 工具 */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-1 { flex: 1; }
+
+/* 文字省略 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 安全区 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
