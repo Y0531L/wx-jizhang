@@ -50,6 +50,9 @@
   color: #1a1a1a;
   min-width: 200rpx;
   text-align: center;
+  height: 120rpx;
+  line-height: 120rpx;
+  padding: 0;
 }
 
 /* 分类 */

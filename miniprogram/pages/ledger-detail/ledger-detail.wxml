@@ -81,5 +81,26 @@
     </view>
   </view>
 
+  <!-- 邀请弹窗 -->
+  <view class="invite-mask" wx:if="{{showInviteModal}}" bindtap="closeInviteModal">
+    <view class="invite-modal" catchtap="noop">
+      <view class="invite-close" bindtap="closeInviteModal">×</view>
+      <view class="invite-ledger">
+        <view class="invite-icon">{{ledger.icon || '👥'}}</view>
+        <text class="invite-name">{{ledger.name || '共享账本'}}</text>
+      </view>
+      <text class="invite-tip">{{inviteTip}}</text>
+      <view class="invite-code-box">
+        <text class="invite-code">{{ledger.code}}</text>
+        <view class="invite-copy" bindtap="copyCode">复制</view>
+      </view>
+      <view class="invite-members" wx:if="{{members.length > 0}}">
+        <image class="invite-member-avatar" wx:for="{{members}}" wx:key="openid" src="{{item.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      </view>
+      <button class="invite-share-btn" open-type="share" bindtap="closeInviteModal">邀请好友加入</button>
+      <text class="invite-share-tip">点击按钮，选择微信好友加入账本</text>
+    </view>
+  </view>
+
   <view class="bottom-spacer"></view>
 </view>

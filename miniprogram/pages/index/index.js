@@ -31,7 +31,57 @@ Page({
   onShow() {
     if (app.globalData.openid) {
       this.loadData();
+      this.checkSubscribeReminder();
     }
+  },
+
+  // 主动引导用户开启订阅消息（一次性订阅需用户授权后才能推送）
+  checkSubscribeReminder() {
+    const userInfo = app.globalData.userInfo;
+    if (!userInfo) return;
+    // 已开启提醒的不重复打扰
+    if (userInfo.remindEnabled) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const last = wx.getStorageSync('lastSubscribeRequestDate');
+    if (last === today) return; // 今天已经请求过
+
+    wx.showModal({
+      title: '开启记账提醒',
+      content: '开启后，每天定时收到记账提醒、排行变化和成就达成通知，不错过每一笔记录。',
+      confirmText: '开启提醒',
+      cancelText: '暂不',
+      success: (res) => {
+        if (res.confirm) {
+          this.requestSubscribeAndEnable();
+        }
+      },
+      complete: () => {
+        wx.setStorageSync('lastSubscribeRequestDate', today);
+      }
+    });
+  },
+
+  requestSubscribeAndEnable() {
+    wx.requestSubscribeMessage({
+      tmplIds: ['-8T7_AtBaeBRDhkyOGL2ADRPFy_jHy6qw-8Tf_ffVzA'],
+      success: (res) => {
+        const status = res['-8T7_AtBaeBRDhkyOGL2ADRPFy_jHy6qw-8Tf_ffVzA'];
+        if (status === 'accept') {
+          call('login', { action: 'setRemind', enabled: true }).then(() => {
+            if (app.globalData.userInfo) {
+              app.globalData.userInfo.remindEnabled = true;
+            }
+            wx.showToast({ title: '提醒已开启', icon: 'success' });
+          });
+        } else {
+          wx.showToast({ title: '需要授权才能提醒', icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '授权失败', icon: 'none' });
+      }
+    });
   },
 
   async loadData() {

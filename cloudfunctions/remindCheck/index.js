@@ -40,9 +40,24 @@ exports.main = async (event, context) => {
     }).get();
     const todayAmount = todayBillsRes.data.reduce((s, b) => s + (Number(b.amount) || 0), 0);
     const todayAmountStr = todayAmount.toFixed(2);
+    const todayBillCount = todayBillsRes.data.length;
+
+    // 备注：还可查询用户排行变化、新成就解锁等，但受当前模板字段限制（仅 time1/amount2），
+    // 无法直接推送长文本。如需要推送排行/成就，建议额外申请对应订阅消息模板。
+    try {
+      const newAchievements = await db.collection('achievements').where({
+        _openid: user._openid,
+        unlockedAt: _.gte(new Date(Date.now() - 24 * 3600 * 1000)) // 近24小时解锁
+      }).get();
+      if (newAchievements.data.length > 0) {
+        console.log(`用户 ${user._openid} 近24小时解锁成就 ${newAchievements.data.length} 个`);
+      }
+    } catch (e) {
+      console.log('查询成就失败', e);
+    }
 
     // 发送订阅消息（模板仅 time1/amount2 两个字段）
-    await sendSubscribeMessage(user._openid, todayAmountStr, formatBJ(now));
+    await sendSubscribeMessage(user._openid, todayAmountStr, formatBJ(now), todayBillCount);
     sentCount++;
   }
 
@@ -59,7 +74,7 @@ function formatBJ(now) {
 
 // 发送订阅消息
 // 模板字段映射（仅2个字段）：time1=记账时间, amount2=记账金额
-async function sendSubscribeMessage(openid, todayAmountStr, nowStr) {
+async function sendSubscribeMessage(openid, todayAmountStr, nowStr, todayBillCount) {
   try {
     await cloud.openapi.subscribeMessage.send({
       touser: openid,
@@ -73,6 +88,6 @@ async function sendSubscribeMessage(openid, todayAmountStr, nowStr) {
     });
   } catch (err) {
     // 用户未授权订阅消息会失败，忽略
-    console.log('订阅消息发送失败（可能未授权）:', openid);
+    console.log('订阅消息发送失败（可能未授权）:', openid, '今日记账', todayBillCount, '笔');
   }
 }

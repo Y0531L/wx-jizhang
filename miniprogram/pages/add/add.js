@@ -36,11 +36,11 @@ Page({
       dateText: this.formatDateText(now),
       time,
       timeText,
-      currentCategories: app.globalData.categories.expense,
-      category: app.globalData.categories.expense[0].id,
-      categoryName: app.globalData.categories.expense[0].name,
-      categoryIcon: app.globalData.categories.expense[0].icon
+      type: 'expense'
     });
+
+    // 先初始化分类（确保首次进入有分类可选）
+    this.initCategories('expense');
 
     // 编辑模式
     if (options.id) {
@@ -62,6 +62,18 @@ Page({
     }
 
     this.loadLedgers();
+  },
+
+  // 初始化/切换分类
+  initCategories(type) {
+    const cats = app.globalData.categories[type] || [];
+    this.setData({
+      type,
+      currentCategories: cats,
+      category: cats[0] ? cats[0].id : '',
+      categoryName: cats[0] ? cats[0].name : '',
+      categoryIcon: cats[0] ? cats[0].icon : ''
+    });
   },
 
   // 加载账单（编辑）
@@ -105,14 +117,7 @@ Page({
 
   switchType(e) {
     const type = e.currentTarget.dataset.type;
-    const cats = app.globalData.categories[type];
-    this.setData({
-      type,
-      currentCategories: cats,
-      category: cats[0].id,
-      categoryName: cats[0].name,
-      categoryIcon: cats[0].icon
-    });
+    this.initCategories(type);
   },
 
   onAmountInput(e) {

@@ -50,8 +50,8 @@ async function handleLogin(openid) {
   // 否则后续所有 where({_openid}) 查询都找不到该用户（导致「用户不存在」）
   const newUser = {
     _openid: openid,
-    nickName: '',
-    avatarUrl: '',
+    nickName: '记账小助手',
+    avatarUrl: '/images/default-avatar.png', // 默认头像
     level: 1,
     exp: 0,
     remindEnabled: false,

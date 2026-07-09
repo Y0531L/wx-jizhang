@@ -11,7 +11,9 @@ Page({
     members: [],
     bills: [],
     totalExpense: '0.00',
-    isOwner: false
+    isOwner: false,
+    showInviteModal: false,
+    inviteTip: ''
   },
 
   onLoad(options) {
@@ -49,22 +51,42 @@ Page({
 
   showInvite() {
     const code = this.data.ledger.code || '';
+    if (!code) return;
+    this.setData({
+      showInviteModal: true,
+      inviteTip: '邀请好友加入「' + (this.data.ledger.name || '共享账本') + '」，一起记账吧！'
+    });
+  },
+
+  closeInviteModal() {
+    this.setData({ showInviteModal: false });
+  },
+
+  noop() {
+    // 阻止邀请弹窗点击冒泡关闭
+    return;
+  },
+
+  copyCode() {
+    const code = this.data.ledger.code || '';
     wx.setClipboardData({
       data: code,
       success: () => {
-        wx.showModal({
-          title: '邀请好友',
-          content: '邀请码已复制：' + code + '\n\n好友可在「共享账本」页通过「邀请码加入」输入此码加入。',
-          confirmText: '去分享',
-          success: (r) => {
-            if (r.confirm) {
-              this.onShareAppMessage && wx.showToast({ title: '点击右上角分享', icon: 'none' });
-            }
-          }
-        });
+        wx.showToast({ title: '邀请码已复制', icon: 'success' });
       }
     });
   },
+
+  onShareAppMessage() {
+    const code = this.data.ledger.code || '';
+    const name = this.data.ledger.name || '共享账本';
+    return {
+      title: '邀请你加入「' + name + '」',
+      desc: '一起记账、共享账单，让每一笔支出都有迹可循',
+      path: '/pages/ledger/ledger?code=' + code,
+      imageUrl: '/images/default-avatar.png'
+    };
+  }
 
   removeMember(e) {
     const openid = e.currentTarget.dataset.openid;
@@ -131,13 +153,5 @@ Page({
         }
       }
     });
-  },
-
-  onShareAppMessage() {
-    const code = this.data.ledger.code || '';
-    return {
-      title: '邀请你加入「' + (this.data.ledger.name || '共享账本') + '」',
-      path: '/pages/ledger/ledger?code=' + code
-    };
   }
 });

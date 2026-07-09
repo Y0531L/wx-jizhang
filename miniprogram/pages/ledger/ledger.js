@@ -5,11 +5,30 @@ const { call } = require('../../utils/cloud.js');
 Page({
   data: {
     ledgers: [],
-    personalCount: 0
+    personalCount: 0,
+    pendingCode: ''
+  },
+
+  onLoad(options) {
+    if (options.code) {
+      this.setData({ pendingCode: options.code });
+    }
   },
 
   onShow() {
     this.loadData();
+    if (this.data.pendingCode) {
+      const code = this.data.pendingCode;
+      this.setData({ pendingCode: '' });
+      wx.showModal({
+        title: '加入账本',
+        content: '收到邀请码：' + code + '，是否加入该账本？',
+        confirmText: '加入',
+        success: (r) => {
+          if (r.confirm) this.joinByCode(code);
+        }
+      });
+    }
   },
 
   async loadData() {
