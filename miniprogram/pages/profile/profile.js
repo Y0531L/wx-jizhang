@@ -4,6 +4,9 @@ const { call } = require('../../utils/cloud.js');
 
 const LEVEL_TITLES = ['记账小白', '记账新手', '记账达人', '记账专家', '记账大师', '账本王者', '财务宗师', '财神转世'];
 
+const DEFAULT_AVATAR = '/images/default-avatar.png';
+const DEFAULT_NICKNAME = '记账小助手';
+
 Page({
   data: {
     userInfo: null,
@@ -27,8 +30,14 @@ Page({
     }
     try {
       const data = await call('achievement', { action: 'status' });
+      let userInfo = app.globalData.userInfo;
+      // 兜底显示
+      if (userInfo) {
+        if (!userInfo.nickName) userInfo.nickName = DEFAULT_NICKNAME;
+        if (!userInfo.avatarUrl) userInfo.avatarUrl = DEFAULT_AVATAR;
+      }
       this.setData({
-        userInfo: app.globalData.userInfo,
+        userInfo,
         level: data.level || 1,
         levelTitle: LEVEL_TITLES[Math.min((data.level || 1) - 1, LEVEL_TITLES.length - 1)],
         achievementCount: data.achievementCount || 0,
@@ -42,6 +51,120 @@ Page({
     }
   },
 
+  // 点击用户头像区域，选择头像
+  chooseAvatar() {
+    if (!this.data.userInfo) {
+      this.loginIfNeeded();
+      return;
+    }
+    wx.showActionSheet({
+      itemList: ['使用默认头像', '使用微信头像', '从相册选择'],
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          this.updateAvatar(DEFAULT_AVATAR);
+        } else if (res.tapIndex === 1) {
+          this.useWechatAvatar();
+        } else if (res.tapIndex === 2) {
+          this.chooseFromAlbum();
+        }
+      }
+    });
+  },
+
+  // 使用微信头像
+  useWechatAvatar() {
+    wx.getUserProfile({
+      desc: '用于设置头像',
+      success: (res) => {
+        const avatarUrl = res.userInfo && res.userInfo.avatarUrl;
+        if (avatarUrl) {
+          this.updateAvatar(avatarUrl);
+        } else {
+          wx.showToast({ title: '未获取到头像', icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '请授权或使用相册选择', icon: 'none' });
+      }
+    });
+  },
+
+  // 从相册选择并上传云存储
+  chooseFromAlbum() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath;
+        wx.showLoading({ title: '上传中' });
+        const cloudPath = `avatars/${app.globalData.openid}_${Date.now()}.jpg`;
+        wx.cloud.uploadFile({
+          cloudPath,
+          filePath: tempFilePath,
+          success: (uploadRes) => {
+            this.updateAvatar(uploadRes.fileID);
+          },
+          fail: (err) => {
+            wx.hideLoading();
+            console.error('上传头像失败', err);
+            wx.showToast({ title: '上传失败', icon: 'none' });
+          }
+        });
+      }
+    });
+  },
+
+  // 更新头像到数据库和本地状态
+  async updateAvatar(avatarUrl) {
+    wx.showLoading({ title: '保存中' });
+    try {
+      await call('login', { action: 'saveProfile', userInfo: { avatarUrl } });
+      const userInfo = this.data.userInfo || {};
+      userInfo.avatarUrl = avatarUrl;
+      app.globalData.userInfo = userInfo;
+      this.setData({ userInfo });
+      wx.hideLoading();
+      wx.showToast({ title: '头像已更新', icon: 'success' });
+    } catch (e) {
+      wx.hideLoading();
+      wx.showToast({ title: '保存失败', icon: 'none' });
+    }
+  },
+
+  // 修改昵称
+  editNickname() {
+    if (!this.data.userInfo) {
+      this.loginIfNeeded();
+      return;
+    }
+    wx.showModal({
+      title: '修改昵称',
+      editable: true,
+      placeholderText: '请输入昵称',
+      content: this.data.userInfo.nickName || '',
+      success: async (res) => {
+        if (res.confirm && res.content) {
+          const nickName = res.content.trim();
+          if (!nickName) return;
+          wx.showLoading({ title: '保存中' });
+          try {
+            await call('login', { action: 'saveProfile', userInfo: { nickName } });
+            const userInfo = this.data.userInfo || {};
+            userInfo.nickName = nickName;
+            app.globalData.userInfo = userInfo;
+            this.setData({ userInfo });
+            wx.hideLoading();
+            wx.showToast({ title: '昵称已更新', icon: 'success' });
+          } catch (e) {
+            wx.hideLoading();
+            wx.showToast({ title: '保存失败', icon: 'none' });
+          }
+        }
+      }
+    });
+  },
+
   loginIfNeeded() {
     if (this.data.userInfo) return;
     wx.getUserProfile({
@@ -49,7 +172,6 @@ Page({
       success: (res) => {
         const userInfo = res.userInfo;
         app.globalData.userInfo = userInfo;
-        // 保存到云数据库
         call('login', { action: 'saveProfile', userInfo }).then(() => {
           this.setData({ userInfo });
         });

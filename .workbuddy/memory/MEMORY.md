@@ -28,9 +28,10 @@
 ## 部署状态（截至2026-07-09）
 - ✅ 10个云函数已部署到环境 cloud1-d1g9bo85dcae54a60
 - ✅ 7个数据库集合已创建：users/bills/ledgers/achievements/reminders/friends/pay_orders
-- ✅ 本地git已push到GitHub（7个commit全部上传，main分支同步）
-- ⚠️ 订阅消息为一次性订阅，需用户在小程序内点「开启提醒」授权后才推送
+- ✅ 本地git已push到GitHub（main分支同步，最新commit 9ea2732）
+- ⚠️ 订阅消息为一次性订阅，需用户在小程序内授权后才能推送，无法强制推送（个人主体限制）
 - ⚠️ 微信支付自动记账(wxpayCallback)需额外配置微信支付商户号才生效
+- ⚠️ 本次新增默认头像与邀请弹窗后，需重新部署 `login`、`remindCheck` 云函数
 
 ## 集合一览
 users / bills / ledgers / achievements / reminders / friends / pay_orders
@@ -41,7 +42,13 @@ users / bills / ledgers / achievements / reminders / friends / pay_orders
 - 主题色：橙色 #ff6b35
 - 遵循中国股市习惯（涨红跌绿）
 
+## 默认头像
+- 路径：`miniprogram/images/default-avatar.png`
+- 用途：新用户默认头像、成员列表/头像兜底
+- 风格：机器人厨师猫（用户提供参考图）
+
 ## 注意事项
 - 小程序无法监听系统通知，多平台提醒通过截图OCR + 定时订阅消息实现
 - ocrBill 云函数当前为框架+正则提取，生产环境建议接入腾讯云OCR
 - 微信支付自动记账需配置商户号
+- 订阅消息模板仅 `time1`/`amount2` 两个字段，无法直接承载排行/成就长文本；如需单独推送，需额外申请模板并走企业主体长期订阅消息

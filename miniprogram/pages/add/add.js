@@ -35,12 +35,12 @@ Page({
       date,
       dateText: this.formatDateText(now),
       time,
-      timeText,
+      timeText: time,
       type: 'expense'
+    }, () => {
+      // setData 回调里初始化分类，避免首屏渲染时 currentCategories 为空
+      this.initCategories('expense');
     });
-
-    // 先初始化分类（确保首次进入有分类可选）
-    this.initCategories('expense');
 
     // 编辑模式
     if (options.id) {
@@ -62,6 +62,11 @@ Page({
     }
 
     this.loadLedgers();
+  },
+
+  onShow() {
+    // 页面从后台返回或被复用时，再次确保分类存在
+    this.initCategories(this.data.type || 'expense');
   },
 
   // 初始化/切换分类

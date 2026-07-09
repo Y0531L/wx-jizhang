@@ -1,10 +1,10 @@
 <!--pages/profile/profile.wxml - 我的-->
 <view class="page">
   <!-- 用户信息 -->
-  <view class="user-card" bindtap="loginIfNeeded">
-    <image class="user-avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
-    <view class="user-info">
-      <text class="user-name">{{userInfo.nickName || '点击登录'}}</text>
+  <view class="user-card">
+    <image class="user-avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" bindtap="chooseAvatar"></image>
+    <view class="user-info" bindtap="editNickname">
+      <text class="user-name">{{userInfo.nickName || (userInfo ? '点击设置昵称' : '点击登录')}}</text>
       <view class="user-level" wx:if="{{userInfo}}">
         <text class="level-badge">Lv.{{level}}</text>
         <text class="level-text">{{levelTitle}}</text>

@@ -71,13 +71,15 @@ async function saveProfile(openid, userInfo) {
   if (res.data.length === 0) {
     return { code: -1, message: '用户不存在' };
   }
-  await users.doc(res.data[0]._id).update({
-    data: {
-      nickName: userInfo.nickName || '',
-      avatarUrl: userInfo.avatarUrl || ''
-    }
-  });
-  return { code: 0, data: { userInfo } };
+  const updateData = {};
+  if (userInfo.nickName !== undefined) {
+    updateData.nickName = userInfo.nickName || '';
+  }
+  if (userInfo.avatarUrl !== undefined) {
+    updateData.avatarUrl = userInfo.avatarUrl || '';
+  }
+  await users.doc(res.data[0]._id).update({ data: updateData });
+  return { code: 0, data: { userInfo: { ...res.data[0], ...updateData } } };
 }
 
 // 设置提醒开关
