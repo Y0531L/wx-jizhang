@@ -50,9 +50,16 @@ App({
       name: 'login',
       data: {}
     }).then(res => {
-      if (res.result && res.result.openid) {
-        this.globalData.openid = res.result.openid;
+      const result = res.result || {};
+      const data = result.data || {};
+      if (data.openid) {
+        this.globalData.openid = data.openid;
+        if (data.userInfo) {
+          this.globalData.userInfo = data.userInfo;
+        }
         this.loadUserInfo();
+      } else {
+        console.error('登录返回异常', res.result);
       }
     }).catch(err => {
       console.error('登录失败', err);

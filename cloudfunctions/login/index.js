@@ -46,7 +46,10 @@ async function handleLogin(openid) {
     return { code: 0, data: { openid, userInfo: res.data[0] } };
   }
   // 新用户
+  // 注意：云函数内 db.add() 不会自动注入 _openid，必须手动写入，
+  // 否则后续所有 where({_openid}) 查询都找不到该用户（导致「用户不存在」）
   const newUser = {
+    _openid: openid,
     nickName: '',
     avatarUrl: '',
     level: 1,
